@@ -2,6 +2,7 @@ version: '3'
 services:
   app:
     container_name: ordent-article
+    image: "cecepaprilianto/ordent-article:1.0.0"
     build: .
     ports: 
       - 8080:8080 
@@ -30,7 +31,7 @@ services:
     
   pgadmin:
     image: dpage/pgadmin4
-    container_name: pgadmin
+    container_name: ordent-pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
@@ -41,10 +42,13 @@ services:
     networks:
       - ordent
     restart: unless-stopped
+    volumes:
+      - app_pgadmin:/var/lib/pgadmin
 
 volumes:
   app:
-  database_postgres:                  
+  database_postgres:    
+  app_pgadmin:              
 
 networks:
   ordent:
