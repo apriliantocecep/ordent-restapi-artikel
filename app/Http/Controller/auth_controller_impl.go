@@ -20,6 +20,17 @@ func NewAuthControllerImpl(authService service.AuthService) *AuthControllerImpl 
 	}
 }
 
+// Register godoc
+// @Summary register user
+// @Schemes
+// @Description register a user
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.Response{data=response.RegisterResponse}
+// @Failure 400 {object} response.Response
+// @Param request body request.RegisterRequest true "register request"
+// @Router /register [post]
 func (controller *AuthControllerImpl) Register(ctx *gin.Context) {
 	var errorOutput []error
 	registerRequest := request.RegisterRequest{}
@@ -60,6 +71,17 @@ func (controller *AuthControllerImpl) Register(ctx *gin.Context) {
 	})
 }
 
+// Login godoc
+// @Summary login user
+// @Schemes
+// @Description login a user using email and password
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.Response{data=response.LoginResponse}
+// @Failure 400 {object} response.Response
+// @Param request body request.LoginRequest true "login request"
+// @Router /login [post]
 func (controller *AuthControllerImpl) Login(ctx *gin.Context) {
 	var errorOutput []error
 	loginRequest := request.LoginRequest{}
