@@ -1,0 +1,51 @@
+version: '3'
+services:
+  app:
+    container_name: ordent-article
+    build: .
+    ports: 
+      - 8080:8080 
+    restart: on-failure
+    volumes:
+      - app:/usr/src/app/
+    depends_on:
+      - db-postgres          
+    networks:
+      - ordent
+
+  db-postgres:
+    image: postgres:latest
+    container_name: db_postgres
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}  
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE}
+      - DATABASE_HOST=${DB_HOST}
+    ports:
+      - '5432:5432'
+    volumes:
+      - database_postgres:/var/lib/postgresql/data
+    networks:
+      - ordent
+    
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    depends_on:
+      - db-postgres
+    ports:
+      - "5151:80"
+    networks:
+      - ordent
+    restart: unless-stopped
+
+volumes:
+  app:
+  database_postgres:                  
+
+networks:
+  ordent:
+    driver: bridge
