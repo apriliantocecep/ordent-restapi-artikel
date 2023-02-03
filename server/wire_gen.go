@@ -19,9 +19,9 @@ import (
 
 // Injectors from server.go:
 
-func InitializedServer() *gin.Engine {
+func InitializedServer(configOptions config.ConfigOptions) *gin.Engine {
 	userRepositoryImpl := repository.NewUserRepositoryImpl()
-	configConfig := config.NewConfig()
+	configConfig := config.NewConfig(configOptions)
 	db := config.NewDB(configConfig)
 	jwtWrapper := config.NewJwtWrapper(configConfig)
 	authServiceImpl := service.NewAuthServiceImpl(userRepositoryImpl, db, configConfig, jwtWrapper)

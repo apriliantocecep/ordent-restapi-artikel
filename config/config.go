@@ -6,6 +6,11 @@ import (
 	"github.com/spf13/viper"
 )
 
+type ConfigOptions struct {
+	Path string
+	Name string
+}
+
 type Config struct {
 	DB_CONNECTION        string `mapstructure:"DB_CONNECTION"`
 	DB_HOST              string `mapstructure:"DB_HOST"`
@@ -18,9 +23,9 @@ type Config struct {
 	JWT_EXPIRATION_HOURS int64  `mapstructure:"JWT_EXPIRATION_HOURS"`
 }
 
-func NewConfig() *Config {
+func NewConfig(configOptions ConfigOptions) *Config {
 	// TODO: RESOLVE CONFIG PATH
-	c, err := LoadConfig(".")
+	c, err := LoadConfig(configOptions)
 	if err != nil {
 		log.Fatalln("Failed at config", err)
 	}
@@ -28,9 +33,9 @@ func NewConfig() *Config {
 	return &c
 }
 
-func LoadConfig(path string) (config Config, err error) {
-	viper.AddConfigPath(path)
-	viper.SetConfigName(".env")
+func LoadConfig(configOptions ConfigOptions) (config Config, err error) {
+	viper.AddConfigPath(configOptions.Path)
+	viper.SetConfigName(configOptions.Name)
 	viper.SetConfigType("env")
 
 	viper.AutomaticEnv()

@@ -47,7 +47,7 @@ var middlewareSet = wire.NewSet(
 	middleware.NewAuthMiddlewareConfig,
 )
 
-func InitializedServer() *gin.Engine {
+func InitializedServer(config.ConfigOptions) *gin.Engine {
 	wire.Build(
 		configSet,
 		homeSet,

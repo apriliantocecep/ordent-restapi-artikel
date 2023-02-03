@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/apriliantocecep/ordent-restapi-artikel/config"
 	"github.com/apriliantocecep/ordent-restapi-artikel/server"
 )
 
@@ -23,6 +24,11 @@ import (
 // @in header
 // @name Authorization
 func main() {
-	handler := server.InitializedServer()
+	configOptions := config.ConfigOptions{
+		Path: ".",
+		Name: ".env",
+	}
+
+	handler := server.InitializedServer(configOptions)
 	handler.Run()
 }

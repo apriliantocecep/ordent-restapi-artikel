@@ -1,0 +1,59 @@
+version: '3'
+services:
+  app-test:
+    container_name: ordent-article-test
+    image: "cecepaprilianto/ordent-article-test:1.0.0"
+    build:
+      context: .
+      dockerfile: ./Dockerfile.test
+    ports: 
+      - 8080:8080 
+    restart: on-failure
+    volumes:
+      - app_test:/usr/src/app/
+    depends_on:
+      - db-postgres-test         
+    networks:
+      - ordent_test
+
+  db-postgres-test:
+    image: postgres:latest
+    container_name: db_postgres_test
+    env_file: .env.test
+    environment:
+      - POSTGRES_USER=${TEST_DB_USERNAME}  
+      - POSTGRES_PASSWORD=${TEST_DB_PASSWORD}
+      - POSTGRES_DB=${TEST_DB_DATABASE}
+      - DATABASE_HOST=${TEST_DB_HOST}
+    ports:
+      - '5432:5432'
+    volumes:
+      - database_postgres_test:/var/lib/postgresql/data
+    networks:
+      - ordent_test
+    
+  pgadmin-test:
+    image: dpage/pgadmin4
+    container_name: ordent-pgadmin-test
+    env_file: .env.test
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    depends_on:
+      - db-postgres-test
+    ports:
+      - "5151:80"
+    networks:
+      - ordent
+    restart: unless-stopped
+    volumes:
+      - app_pgadmin_test:/var/lib/pgadmin
+
+volumes:
+  app_test:
+  database_postgres_test:
+  app_pgadmin_test:
+
+networks:
+  ordent_test:
+    driver: bridge

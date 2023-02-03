@@ -15,6 +15,7 @@ func RegisterRoutes(
 	authController controller.AuthController,
 	articleController controller.ArticleController,
 ) *gin.Engine {
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	docs.SwaggerInfo.BasePath = "/"
 
